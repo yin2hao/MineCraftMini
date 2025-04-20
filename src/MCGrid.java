@@ -1,7 +1,4 @@
 import java.util.*;
-import org.lwjgl.opengl.*;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.util.glu.GLU.*;
 
 public class MCGrid {
 	

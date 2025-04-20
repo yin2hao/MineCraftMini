@@ -19,7 +19,7 @@ public class MineCraft extends MCWindow {
     MCMapGen gen;
 
 	public MineCraft(){
-		super(800, 500);
+		super(800, 500);//因为MineCraft extend MCWindows，所以super跳转到MCWindows方法
 		m = this;
 	}
 
@@ -27,21 +27,21 @@ public class MineCraft extends MCWindow {
 
 	protected void init() {
 
-		MCBlock.init();
+		MCBlock.init();//方块破坏动画初始化
 
-		glEnable(GL_TEXTURE_2D);
-		glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LEQUAL);
+		glEnable(GL_TEXTURE_2D);//启用2D纹理
+		glEnable(GL_DEPTH_TEST);//启用深度测试
+        glDepthFunc(GL_LEQUAL); //设置深度测试函数
         float clear = 0f;
-		glClearColor(clear, clear, clear, 1);
-		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
+		glClearColor(clear, clear, clear, 1);// 设置清屏颜色为黑色
+		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );// 设置透视修正质量
 		//glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST );
 		//glEnable( GL_POLYGON_SMOOTH );
-		glEnable(GL_CULL_FACE);
-		glFrontFace(GL_CW);
+		glEnable(GL_CULL_FACE);// 启用面剔除
+		glFrontFace(GL_CW);// 设置顺时针为正面
 
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_BLEND);// 启用混合
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);// 设置混合函数
 
 		/*glFogi (GL_FOG_MODE, GL_LINEAR );
 		FloatBuffer fb = BufferUtils.createFloatBuffer(4);
@@ -55,8 +55,8 @@ public class MineCraft extends MCWindow {
 
 		//MCMaterial.setMaterial( MCMaterial.NORM );
         
-        gen = new MCMapGen(LX, LY, LZ);
-        genMap();
+        gen = new MCMapGen(LX, LY, LZ);//初始化地图数据
+        genMap();//生成地图
         
 		light = new MCLight( LX/2 * MCBlock.SIDE, LY/2 * MCBlock.SIDE , LZ* MCBlock.SIDE , GL_LIGHT1);
 		light.enable();
@@ -106,8 +106,9 @@ public class MineCraft extends MCWindow {
 
 	long[] keyTime = new long[256];
 	boolean mouse;
+
 	protected void update(int delta){
-		long time = MCTimer.getTime();
+		long time = MCTimer.getTime();//获取当前MCTime存储的相对时间
 
 		if( isKeyDown( KEY_ESCAPE ) ){
 			if(mouse)
@@ -115,7 +116,8 @@ public class MineCraft extends MCWindow {
 			mouse = false;
 		}
 
-		double moveConst = 5e-3 * MCBlock.SIDE;
+		double moveConst = 5e-3 * MCBlock.SIDE;//移动速度基准值
+		//移动的代码
 		if( isKeyDown( KEY_W ) )
 			p.move(delta * moveConst);
 		if( isKeyDown( KEY_A ) )
@@ -140,7 +142,7 @@ public class MineCraft extends MCWindow {
 
 		while( Mouse.next() ){
 			int btn = Mouse.getEventButton();
-			if(btn == 0){
+			if(btn == 0){//鼠标左键
 				if(!mouse){
 					mouse = true;
 					p.hideMouse();
@@ -166,6 +168,7 @@ public class MineCraft extends MCWindow {
 		p.applyForces(delta);
 		p.updateSelected();
 	}
+
 	public void display() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -182,7 +185,6 @@ public class MineCraft extends MCWindow {
 
 	public static void main(String[] argv) {
 		final MineCraft m = new MineCraft();
-
 		m.start();
 
 		/*new Thread(new Runnable(){public void run(){m.start();}}).start();

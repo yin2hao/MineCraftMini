@@ -9,6 +9,8 @@ public class MCBlock{
 	public  double x, y,z;
 	
 	public static Texture[] breaks = new Texture[10];
+
+	//方块破坏动画
 	public static void init(){
 		for(int i = 1; i<=10; i++)
 			breaks[i-1] = MCTextureLoader.getTexture("break" + i +".png");

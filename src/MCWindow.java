@@ -39,17 +39,19 @@ public class MCWindow{
 
 	public void start() {
 		try {
-			Display.setDisplayMode(new DisplayMode(width, height));
-			Display.create();
-			Display.setVSyncEnabled(true);
+			//注意：因为时间久远，该方法已被弃用，LWJGL使用org.lwjgl.glfw.GLFW代为实现，此处处理方法仅供参考
+			Display.setDisplayMode(new DisplayMode(width, height));//初始化窗口参数
+			Display.create();//创建窗口
+			Display.setVSyncEnabled(true);//启用垂直同步（待学习）
 		} catch (LWJGLException e) {
+			//打印异常并终止程序
 			e.printStackTrace();
 			System.exit(0);
 		}
 
-		init();
-		timer.update();
-		fpsTimer.update();
+		init();//初始化并创建地图
+		timer.update();//更新该MCTimer对象中存储的初始时间
+		fpsTimer.update();//更新MCFPSTimer对象中存储的初始时间
 
 		//setFullscreen(true);
 
@@ -58,15 +60,15 @@ public class MCWindow{
 			int delta = timer.getDelta();
 			timer.update();
 
-			update(delta);
-			display();
-			updateFPS();
+			update(delta);//使用重写的update方法
+			display();//使用重写的update方法，包含了按键映射
+			updateFPS();//使用重写的updateFPS方法显示当前帧率
             
-			Display.update(true);
-			Display.sync(MAXFPS);
+			Display.update(true);//更新窗口，功能未知
+			Display.sync(MAXFPS);//限制最大帧率
 		}
 
-		Display.destroy();
+		Display.destroy();//销毁窗口，该方法已被弃用，转为GLFW.glfwTerminate()替代
 	}
 
 	protected void init(){
@@ -132,6 +134,7 @@ public class MCWindow{
 	}
 
 
+	//窗口正上方显示当前帧率
 	public void updateFPS() {
 		fpsTimer.frame();
 		Display.setTitle("FPS: " + fpsTimer.getFPS());
