@@ -7,29 +7,31 @@ public class MCWindow{
 
 	private int height;
 	private int width;
+	//fheight和fwidth是全屏窗口大小
 	private int fheight;
 	private int fwidth;
 
-	private static final int MAXFPS = 60;
+	private static final int MAXFPS = 60;//定义最大帧率
 
+	//定义了俩，后面要new对象
 	private MCTimer timer;
 	private MCFPSTimer fpsTimer;
 
-	private boolean fullscreen;
+	private boolean fullscreen;//疑似检查是否全屏
 
-	private int fps;
+	private int fps;//一个似乎是用不到的帧率
 
 	public MCWindow (int w, int h){
+		//创建新窗口前的参数赋值
 		width = w;
 		height = h;
 
+		//new对象
 		timer = new MCTimer();
-		fpsTimer = new MCFPSTimer();
+		fpsTimer = new MCFPSTimer();//计算实时帧率
 	}
 
-	public int getWidth(){
-		return fullscreen ? fwidth : width;
-	}
+	public int getWidth(){return fullscreen ? fwidth : width;}
 
 	public int getHeight(){
 		return fullscreen ? fheight : height;
