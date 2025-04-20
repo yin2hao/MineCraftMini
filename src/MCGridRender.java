@@ -5,6 +5,8 @@ import org.newdawn.slick.opengl.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.*;
 
+//基于LWJGL和Slick-Utils的网格渲染类，主要用于高效渲染大量带纹理的四边形
+//看不懂，但我想暂时不用看懂这个
 public class MCGridRender{
 
 	private HashMap<Texture, HashSet<MCTexturedQuad> > map;

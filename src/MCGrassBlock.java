@@ -14,5 +14,4 @@ public class MCGrassBlock extends MCBlock{
 	public MCGrassBlock(double x, double y, double z){
 		super(x,y,z, textures);
 	}
-	
 }

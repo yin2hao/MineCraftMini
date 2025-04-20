@@ -49,19 +49,20 @@ public class MCWindow{
 			System.exit(0);
 		}
 
-		init();//初始化并创建地图
+		init();//初始化并创建地图，初始化方块破坏动画
 		timer.update();//更新该MCTimer对象中存储的初始时间
 		fpsTimer.update();//更新MCFPSTimer对象中存储的初始时间
 
 		//setFullscreen(true);
 
+		//当窗口没有被关闭
 		while (!Display.isCloseRequested()) {
             
 			int delta = timer.getDelta();
 			timer.update();
 
-			update(delta);//使用重写的update方法
-			display();//使用重写的update方法，包含了按键映射
+			update(delta);//使用重写的update方法，包含按键事件
+			display();//使用重写的display方法，包含MC窗口绘制，光照效果，光标效果，水体效果
 			updateFPS();//使用重写的updateFPS方法显示当前帧率
             
 			Display.update(true);//更新窗口，功能未知

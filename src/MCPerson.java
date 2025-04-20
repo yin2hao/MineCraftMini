@@ -1,11 +1,7 @@
 import org.lwjgl.*;
-import org.lwjgl.opengl.*;
 import org.lwjgl.input.*;
-import java.io.*;
+
 import java.util.*;
-import java.nio.*;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.util.glu.GLU.*;
 
 public class MCPerson{
 	
@@ -191,7 +187,7 @@ public class MCPerson{
 	}
 	
 	public boolean ib( double x, double y, double z ){
-		return g.ib((int)(x/MCBlock.SIDE), (int)(y/MCBlock.SIDE), (int)(z/MCBlock.SIDE));
+		return g.CoordinateCheck((int)(x/MCBlock.SIDE), (int)(y/MCBlock.SIDE), (int)(z/MCBlock.SIDE));
 	}
 	
 	private double vx,vy,vz;

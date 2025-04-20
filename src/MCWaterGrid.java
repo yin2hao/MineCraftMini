@@ -1,7 +1,6 @@
 import java.util.*;
-import org.lwjgl.opengl.*;
+
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.util.glu.GLU.*;
 
 public class MCWaterGrid extends MCGrid {
 
@@ -29,9 +28,9 @@ public class MCWaterGrid extends MCGrid {
 		for(int x = 0; x<lx; x++)
 		for(int y = 0; y<ly; y++)
 		for(int z = 0; z<lz; z++)
-			if( g[x][y][z] instanceof MCWaterBlock ){
+			if( coordinates[x][y][z] instanceof MCWaterBlock ){
 				vis[x][y][z] = true;
-				if(ib(x,y,z-1) && !vis[x][y][z-1] &&  get(x,y,z-1) == null && g2.get(x,y,z-1)==null){
+				if(CoordinateCheck(x,y,z-1) && !vis[x][y][z-1] &&  get(x,y,z-1) == null && g2.get(x,y,z-1)==null){
 					add.add(MineCraft.m.loadBlock('w',x,y,z-1));
 					vis[x][y][z-1] = true;
 				}else{
@@ -41,7 +40,7 @@ public class MCWaterGrid extends MCGrid {
 						int tz = z +mz[i];
 						int tzz = tz-1;
 
-						if(ib(tx,ty,tz) && !vis[tx][ty][tz] && get(tx,ty,tz) == null && g2.get(tx,ty,tz)==null/* && (!ib(x,y, tzz) || g2.get(x,y,tzz) != null)*/){
+						if(CoordinateCheck(tx,ty,tz) && !vis[tx][ty][tz] && get(tx,ty,tz) == null && g2.get(tx,ty,tz)==null/* && (!CoordinateCheck(x,y, tzz) || g2.get(x,y,tzz) != null)*/){
 							add.add(MineCraft.m.loadBlock('w',tx,ty,tz));
 							vis[tx][ty][tz] = true;
 						}

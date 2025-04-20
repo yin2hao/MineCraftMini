@@ -1,5 +1,3 @@
-import org.lwjgl.*;
-import org.lwjgl.opengl.*;
 import org.newdawn.slick.opengl.*;
 import static org.lwjgl.opengl.GL11.*;
 
@@ -39,13 +37,13 @@ public class MCTexturedQuad{
 	public void render(){
 		if(glow) {
 			glEnd();
-			MCLight.light.setStr(MCLight.GLOW);
+			MCLight.light.setLightSourceIntensity(MCLight.GLOW);
 			glBegin(GL_QUADS);
 		}
 		block.render(side);
     	if(glow) {
 			glEnd();
-			MCLight.light.setStr(MCLight.NORM);
+			MCLight.light.setLightSourceIntensity(MCLight.NORM);
 			glBegin(GL_QUADS);
 		}
 	}

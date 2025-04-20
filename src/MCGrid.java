@@ -1,40 +1,43 @@
 import java.util.*;
 
+//MC的3维骨架
 public class MCGrid {
 	
-	protected MCBlock[][][] g;
-	protected  MCPlane plane;
+	protected MCBlock[][][] coordinates;//MC方块的三维坐标，原变量名为g，为了方便理解进行了修改
+	protected MCPlane plane;//用于渲染的平面对象
 	
-	public final int lx, ly, lz;
-	
+	public final int lx, ly, lz;//网格在x、y、z三个方向上的大小(长度)
+
+
 	public MCGrid(int lx, int ly, int lz){
-		g = new MCBlock[this.lx=lx][this.ly=ly][this.lz=lz];
+		coordinates = new MCBlock[this.lx=lx][this.ly=ly][this.lz=lz];
 		plane = new MCPlane();
 	}
-	
-	public MCBlock set(int x, int y, int z, MCBlock block){
-		if(!ib(x,y,z)) return null;
-		
-		MCBlock ret = g[x][y][z];
-		g[x][y][z] = block;
-		return ret;
+
+	//放置方块
+	public void set(int x, int y, int z, MCBlock block){
+		if(!CoordinateCheck(x,y,z)) return;
+
+		MCBlock ret = coordinates[x][y][z];
+		coordinates[x][y][z] = block;
 	}
-	
+
+	//获取三维网格中指定坐标位置的方块
 	public MCBlock get(int x, int y, int z){
-		if(!ib(x,y,z)) return null;
-		
-		return g[x][y][z];
+		if(!CoordinateCheck(x,y,z)) return null;
+		return coordinates[x][y][z];
 	}
-	
+
+	//用于浮点数的获取三维网格中指定坐标位置的方块
 	public MCBlock get(double x, double y, double z){
 		int xx = (int)(x / MCBlock.SIDE);
 		int yy = (int)(y / MCBlock.SIDE);
 		int zz = (int)(z / MCBlock.SIDE);
-		
 		return get(xx,yy,zz);
 	}
-	
-	public boolean ib(int x, int y, int z){
+
+	//坐标检查,为方便理解更改了方法名（ib-->CoordinateCheck）
+	public boolean CoordinateCheck(int x, int y, int z){
 		return !(x<0 || y<0 || z<0 || x>=lx || y>=ly || z>=lz);
 	}
 	
@@ -60,7 +63,7 @@ public class MCGrid {
 			r = new MCGridRender();
 			
 			if (vis == null)
-				vis = new boolean[g.length][g[0].length][g[0][0].length];
+				vis = new boolean[coordinates.length][coordinates[0].length][coordinates[0][0].length];
 			
 			int x = (int)(p.x/MCBlock.SIDE);
 			int y = (int)(p.y/MCBlock.SIDE);
@@ -119,15 +122,15 @@ public class MCGrid {
 			//iter++;
 			int[] c = que.remove();
 			int xx = c[0]; int yy = c[1]; int zz = c[2];
-			if(g[xx][yy][zz] == null)
+			if(coordinates[xx][yy][zz] == null)
 				for(int i = 0; i<mx.length; i++){
 					int tx = xx +mx[i];
 					int ty = yy +my[i];
 					int tz = zz +mz[i];
 	
-					if(ib(tx,ty,tz)){
-						if(g[tx][ty][tz] != null)
-							r.add(g[tx][ty][tz].getQuads()[sides[i]]);
+					if(CoordinateCheck(tx,ty,tz)){
+						if(coordinates[tx][ty][tz] != null)
+							r.add(coordinates[tx][ty][tz].getQuads()[sides[i]]);
 						if(vis[tx][ty][tz])
 							continue;
 						que.add(new int[]{tx,ty,tz});

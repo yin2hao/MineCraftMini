@@ -90,7 +90,7 @@ public class MineCraft extends MCWindow {
 
     }
 
-
+	//放置方块
 	public static MCBlock loadBlock(char c, int x, int y, int z){
 		switch(c){
 			case 'g' : return new MCGrassBlock(x *MCBlock.SIDE, y*MCBlock.SIDE, z*MCBlock.SIDE);
@@ -148,7 +148,9 @@ public class MineCraft extends MCWindow {
 					p.hideMouse();
 				}
 			}
+			//鼠标右键按下
 			if(btn == 1 && Mouse.getEventButtonState()){
+				//放置方块
 				p.place('d');
 			}
 		}
@@ -170,16 +172,22 @@ public class MineCraft extends MCWindow {
 	}
 
 	public void display() {
+		//清除颜色缓冲区和深度缓冲区，为新的帧做准备
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		//设置当前绘制颜色为绿色
 		glColor4d(0,1,0,1);
 
-		p.setCamera();
-		light.setPos(p.x,p.y, 2 * LZ * MCBlock.SIDE);
+		p.setCamera();//设置摄像头位置
+		light.setPos(p.x,p.y, 2 * LZ * MCBlock.SIDE);//设置光源位置
 		//light.update();
  		g.render(p);
+
+		 //水体相关
  		trans.render(p);
 		trans.floodWater();
+
+		//光标相关
 		cursor.render();
 	}
 
