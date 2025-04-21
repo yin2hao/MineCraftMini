@@ -37,6 +37,7 @@ public class MCWindow{
 		return fullscreen ? fheight : height;
 	}
 
+	//创建并显示游戏窗口
 	public void start() {
 		try {
 			//注意：因为时间久远，该方法已被弃用，LWJGL使用org.lwjgl.glfw.GLFW代为实现，此处处理方法仅供参考
@@ -55,9 +56,9 @@ public class MCWindow{
 
 		//setFullscreen(true);
 
-		//当窗口没有被关闭
+		//当窗口没有被关闭时循环更新
 		while (!Display.isCloseRequested()) {
-            
+            //更新游戏计时
 			int delta = timer.getDelta();
 			timer.update();
 

@@ -1,16 +1,14 @@
 import org.lwjgl.*;
 import org.lwjgl.input.*;
-
 import java.util.*;
 
 public class MCPerson{
-	
 	private MineCraft window;
 	private MCGrid g;
 	private MCWaterGrid trans;
 	
-	private double degx, degz;
-	public double x, y, z;
+	private double degx, degz;//视角角度
+	public double x, y, z;//玩家位置
 	public static MCPerson p;
 	
 	public MCPerson(double x, double y, double z, double degx, double degz, MineCraft window){
@@ -26,20 +24,21 @@ public class MCPerson{
 		forces.add(new MCGravity());
 		p = this;
 	}
-	
+
+	//设置玩家摄像头位置
 	public void setCamera(){
 		MCCamera.setCamera(window.getWidth(), window.getHeight(), degx, degz, x,y,z);
 	}
-	
-	/* Mouse Handling */
-	
+
+
 	public void resetCapture(){
 		resetMouse();
 		Mouse.getDX();
 		Mouse.getDY();
 	}
+
+	//处理鼠标移动来控制视角
 	public void captureMovement(  ){
-		
 		if(!Mouse.isGrabbed()) return;
 		
 		int dx = Mouse.getDX(), dy = Mouse.getDY();
@@ -55,6 +54,7 @@ public class MCPerson{
 		
 	}
 
+	//将鼠标重置到屏幕中心
 	public void resetMouse(){
 		Mouse.setCursorPosition( window.getWidth()/2, window.getHeight()/2 );
 		//Mouse.getDX();Mouse.getDY();
@@ -71,7 +71,8 @@ public class MCPerson{
 	}
 	
 	private static final Cursor ORIG_MOUSE = null;
-	
+
+	//隐藏鼠标光标
 	public void hideMouse(){
 		
 		Mouse.setGrabbed(true);
@@ -81,6 +82,7 @@ public class MCPerson{
 		}catch(Exception e){e.printStackTrace();}
 		resetCapture();
 	}
+	//显示鼠标光标
 	public void showMouse(){
 		
 		Mouse.setGrabbed(false);
@@ -90,21 +92,22 @@ public class MCPerson{
 		}catch(Exception e){e.printStackTrace();}
 	}
 	
-	
-	/* Movement */
-	
+
+	//将视角角度转换为2D方向向量
 	public double[] toVec2D(){
 		return new double[]{Math.cos(Math.toRadians( degx )),
 							Math.sin(Math.toRadians( degx ))};
 	}
-	
+
+	//将视角角度转换为3D方向向量
 	public double[] toVec3D(){
 		double cosA = Math.sin(Math.toRadians( degz ));
 		return new double[]{Math.cos(Math.toRadians( degx )) * cosA,
 							Math.sin(Math.toRadians( degx )) * cosA,
 							Math.cos(Math.toRadians( degz )) * -1  };
 	}
-	
+
+	//向前移动
 	public void move( double dist ){
 		
 		if ( inWater()) dist /= 2;
@@ -129,19 +132,21 @@ public class MCPerson{
 		x -= dx;
 		
 	}
-	
+
+
+	//向左移动
 	public void moveLeft( double dist ){
 		degx += 90;
 		move(dist);
 		degx -= 90;
 	}
-	
+	//向右移动
 	public void moveRight( double dist ){
 		degx -= 90;
 		move(dist);
 		degx += 90;
 	}
-	
+	//向后移动
 	public void moveBack( double dist ){
 		degx += 180;
 		move(dist);
@@ -155,7 +160,8 @@ public class MCPerson{
 	public boolean collide(){
 		return collide(x,y,z);
 	}
-	
+
+	//检测玩家是否与方块碰撞
 	public boolean collide(double x, double y, double z){
 
 		double dif = MCBlock.SIDE/3;
@@ -185,7 +191,8 @@ public class MCPerson{
 
 		return false;
 	}
-	
+
+
 	public boolean ib( double x, double y, double z ){
 		return g.CoordinateCheck((int)(x/MCBlock.SIDE), (int)(y/MCBlock.SIDE), (int)(z/MCBlock.SIDE));
 	}
@@ -193,6 +200,7 @@ public class MCPerson{
 	private double vx,vy,vz;
 	public ArrayList<MCForce> forces = new ArrayList<MCForce>();
 
+	//应用各种物理力(重力、跳跃等)
 	public void applyForces(int delta){
 		
 		double t = delta / 1000.;
@@ -212,8 +220,7 @@ public class MCPerson{
 		}
 
 		double side = MCBlock.SIDE;
-		
-		//System.out.println (vz);
+
 		if( inWater() ) vz  = -1.7 * MCBlock.SIDE;
 		
 		if(vz < 0 ){
@@ -246,7 +253,8 @@ public class MCPerson{
 		vx *= 1-(t*2);
 		vy *= 1-(t*2);
 	}
-	
+
+	//处理跳跃动作，水中跳跃行为不同
 	public void jump( double delta ){
 		if( ! inWater()){
 			if( hasBelow() )
@@ -268,14 +276,15 @@ public class MCPerson{
 	public void boost(){
 		forces.add(new MCBoost(toVec3D()));
 	}
-	
+
+	//检查玩家脚下是否有方块
 	public boolean hasBelow(){
 		return vz==0 &&  collide(x,y,z-.02*MCBlock.SIDE);
 	}
 	
 	private final int precision = 100;
 	private final int dist = 5;
-	
+
 	public double[] sight(double[] vec, double x, double y, double z){
 		for(int i = 0; i<precision; i++){
 			x += vec[0];
@@ -289,7 +298,8 @@ public class MCPerson{
 	}
 	
 	private MCBlock selected;
-	
+
+	//更新玩家视线指向的方块(高亮显示)
 	public void updateSelected(){
 
 		double[] vec = toVec3D();
@@ -312,7 +322,8 @@ public class MCPerson{
 		//System.out.println (selected);
 		
 	}
-	
+
+	//放置新方块
 	public void place(char c){
 		double[] vec = toVec3D();
 		double mult = (double)dist/precision * MCBlock.SIDE;
@@ -335,14 +346,16 @@ public class MCPerson{
 				g.unrender(b);
 		}
 	}
-	
+
+	//移除选中的方块
 	public void remove(){
 		if( selected != null ){
 			g.unrender(selected);
 			selected = null;
 		}
 	}
-	
+
+	//对选中的方块进行"工作"(如挖掘)
 	public void work( double delta ){
 		if( selected != null ){
 			if( selected.dead() )
@@ -356,9 +369,8 @@ public class MCPerson{
 		if( selected != null)
 			selected.setWork(0);
 	}
-	
-	/* Water */
-	
+
+	//检查玩家是否在水中(身体部分浸入)
 	public boolean inWater(){
 		
 		if( underWater() ) return true;
@@ -380,7 +392,8 @@ public class MCPerson{
 
 		return false;
 	}
-	
+
+	//检查玩家是否在水中(身体完全浸入)
 	public boolean underWater(){
 		double dif = MCBlock.SIDE/3;
 		double[] points = { x-dif,y+dif,z,
