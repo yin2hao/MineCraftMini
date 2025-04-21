@@ -1,8 +1,9 @@
 import org.newdawn.slick.opengl.*;
 import static org.lwjgl.opengl.GL11.*;
 
+//用于 Minecraft 风格游戏中方块的各个面渲染
+//因为该库已经不再更新(2015年最后更新)，所以不作注释
 public class MCTexturedQuad{
-
 	protected Texture texture;
 	protected MCBlock block;
 	protected int side;

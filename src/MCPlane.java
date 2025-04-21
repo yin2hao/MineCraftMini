@@ -1,5 +1,6 @@
 public class MCPlane{
-	
+
+	//看不懂啊看不懂
 	public double[] norm;
 	public double x,y,z;
 	
